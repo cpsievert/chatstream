@@ -11,7 +11,6 @@ from typing import Generator, Sequence, cast
 import chromadb
 import chromadb.api
 import pypdf
-import shiny.experimental as x
 import tiktoken
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from shiny import App, Inputs, Outputs, Session, reactive, render, ui
@@ -36,58 +35,45 @@ DEBUG = True
 # already been used. Disabling parallelism to avoid deadlocks...
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-# Code for initializing popper.js tooltips.
-tooltip_init_js = """
-var tooltipTriggerList = [].slice.call(
-  document.querySelectorAll('[data-bs-toggle="tooltip"]')
-);
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-  return new bootstrap.Tooltip(tooltipTriggerEl);
-});
-"""
 
-app_ui = x.ui.page_fillable(
-    ui.head_content(ui.tags.title("Shiny Document Query")),
-    x.ui.layout_sidebar(
-        x.ui.sidebar(
-            ui.h4("Shiny Document Query"),
-            ui.hr(),
-            ui.input_file("file", "Drag to upload text or PDF files", multiple=True),
-            ui.input_select(
-                "model",
-                "Model",
-                choices=["gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-4", "gpt-4-32k"],
-                selected="gpt-3.5-turbo-16k",
-            ),
-            ui.hr(),
-            ui.output_ui("uploaded_filenames_ui"),
-            ui.hr(),
-            ui.p(ui.h5("Export conversation")),
-            ui.input_radio_buttons(
-                "download_format", None, ["Markdown", "JSON"], inline=True
-            ),
-            ui.div(
-                ui.download_button("download_conversation", "Download"),
-            ),
-            ui.hr(),
-            ui.p(
-                "Built with ",
-                ui.a("Shiny for Python", href="https://shiny.rstudio.com/py/"),
-            ),
-            ui.p(
-                ui.a(
-                    "Source code",
-                    href="https://github.com/wch/chatstream",
-                    target="_blank",
-                ),
-            ),
-            width=280,
-            position="right",
+app_ui = ui.page_sidebar(
+    ui.sidebar(
+        ui.input_file("file", "Drag to upload text or PDF files", multiple=True),
+        ui.input_select(
+            "model",
+            "Model",
+            choices=["gpt-3.5-turbo", "gpt-3.5-turbo-16k", "gpt-4", "gpt-4-32k"],
+            selected="gpt-3.5-turbo-16k",
         ),
-        ui.output_ui("query_ui"),
+        ui.hr(),
+        ui.output_ui("uploaded_filenames_ui"),
+        ui.hr(),
+        ui.h5("Export conversation"),
+        ui.input_radio_buttons(
+            "download_format", None, ["Markdown", "JSON"], inline=True
+        ),
+        ui.div(
+            ui.download_button("download_conversation", "Download"),
+        ),
+        ui.hr(class_="mt-auto"),
+        ui.p(
+            "Built with ",
+            ui.a("Shiny for Python", href="https://shiny.rstudio.com/py/"),
+        ),
+        ui.p(
+            ui.a(
+                "Source code",
+                href="https://github.com/wch/chatstream",
+                target="_blank",
+            ),
+        ),
+        width=280,
+        position="right",
+        title="Shiny Document Query",
+        style="height:100%;",
     ),
-    # Initialize the tooltips at the bottom of the page (after the content is in the DOM)
-    ui.tags.script(tooltip_init_js),
+    ui.output_ui("query_ui"),
+    window_title="Shiny Document Query"
 )
 
 # ======================================================================================

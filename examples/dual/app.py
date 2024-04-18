@@ -1,82 +1,59 @@
 from __future__ import annotations
 
-import shiny.experimental as x
 from shiny import App, Inputs, Outputs, Session, reactive, ui
 
 import chatstream
 
-# Code for initializing popper.js tooltips.
-tooltip_init_js = """
-var tooltipTriggerList = [].slice.call(
-  document.querySelectorAll('[data-bs-toggle="tooltip"]')
-);
-var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-  return new bootstrap.Tooltip(tooltipTriggerEl);
-});
-"""
-
-app_ui = x.ui.page_fillable(
-    ui.head_content(ui.tags.title("Shiny ChatGPT")),
-    x.ui.layout_sidebar(
-        x.ui.sidebar(
-            ui.h4("Shiny ChatGPT"),
-            ui.hr(),
-            ui.input_select(
-                "model",
-                "Model",
-                choices=["gpt-3.5-turbo", "gpt-4"],
-                selected="gpt-3.5-turbo",
-            ),
-            ui.input_slider(
-                "temperature",
-                ui.span(
-                    "Temperature",
-                    {
-                        "data-bs-toggle": "tooltip",
-                        "data-bs-placement": "left",
-                        "title": "Lower values are more deterministic. Higher values are more random and unpredictable.",
-                    },
-                ),
-                min=0,
-                max=2,
-                value=0.7,
-                step=0.05,
-            ),
-            ui.input_switch("auto_converse", "Auto-conversation", value=True),
-            ui.input_slider(
-                "auto_converse_delay",
-                "Conversation delay (seconds)",
-                min=0,
-                max=3,
-                value=2.4,
-                step=0.2,
-            ),
-            ui.hr(),
-            ui.p(
-                "Built with ",
-                ui.a("Shiny for Python", href="https://shiny.rstudio.com/py/"),
-            ),
-            ui.p(
-                ui.a(
-                    "Source code",
-                    href="https://github.com/wch/chatstream",
-                    target="_blank",
-                ),
-            ),
-            position="right",
+app_ui = ui.page_sidebar(
+    ui.sidebar(
+        ui.input_select(
+            "model",
+            "Model",
+            choices=["gpt-3.5-turbo", "gpt-4"],
+            selected="gpt-3.5-turbo",
         ),
-        x.ui.layout_column_wrap(
-            1 / 2,
-            x.ui.card(
-                chatstream.chat_ui("chat1"),
+        ui.input_slider(
+            "temperature",
+            ui.tooltip(
+                "Temperature",
+                "Lower values are more deterministic. Higher values are more random and unpredictable."
             ),
-            x.ui.card(
-                chatstream.chat_ui("chat2"),
+            min=0,
+            max=2,
+            value=0.7,
+            step=0.05,
+        ),
+        ui.input_switch("auto_converse", "Auto-conversation", value=True),
+        ui.input_slider(
+            "auto_converse_delay",
+            "Conversation delay (seconds)",
+            min=0,
+            max=3,
+            value=2.4,
+            step=0.2,
+        ),
+        ui.hr(class_="mt-auto"),
+        ui.p(
+            "Built with ",
+            ui.a("Shiny for Python", href="https://shiny.rstudio.com/py/"),
+        ),
+        ui.p(
+            ui.a(
+                "Source code",
+                href="https://github.com/wch/chatstream",
+                target="_blank",
             ),
         ),
-        # Initialize the tooltips at the bottom of the page (after the content is in the DOM)
-        ui.tags.script(tooltip_init_js),
+        title="Shiny ChatGPT",
+        position="right",
+        style="height:100%;"
     ),
+    ui.layout_columns(
+        ui.card(chatstream.chat_ui("chat1")),
+        ui.card(chatstream.chat_ui("chat2")),
+    ),
+    window_title="Shiny ChatGPT",
+    fillable=True
 )
 
 # ======================================================================================

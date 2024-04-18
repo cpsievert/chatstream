@@ -2,8 +2,12 @@ from shiny import App, Inputs, Outputs, Session, ui
 
 import chatstream
 
-app_ui = ui.page_fillable(
+app_ui = ui.page_sidebar(
+    ui.sidebar(
+        title="Chat history",
+    ),
     chatstream.chat_ui("mychat"),
+    fillable=True,
     fillable_mobile=True,
 )
 

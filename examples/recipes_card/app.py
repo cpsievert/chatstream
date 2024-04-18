@@ -4,10 +4,8 @@ import re
 from typing import TypedDict
 
 import shiny
-import shiny.experimental as x
 import webscraper
 import yaml
-from htmltools import css
 from shiny import App, Inputs, Outputs, Session, reactive, render, ui
 
 import chatstream
@@ -166,7 +164,7 @@ def answer_to_recipe_card(answer: str) -> ui.TagChild:
 def recipe_card(recipe: Recipe) -> ui.TagChild:
     title = None
     if "title" in recipe:
-        title = x.ui.card_header(
+        title = ui.card_header(
             {"class": "bg-dark fw-bold fs-3"},
             recipe["title"],
         )
@@ -256,16 +254,15 @@ def recipe_card(recipe: Recipe) -> ui.TagChild:
             ui.a({"href": recipe["source"], "target": "_blank"}, recipe["source"]),
         )
 
-    return x.ui.card(
+    return ui.card(
         title,
         tags,
         summary,
-        x.ui.layout_column_wrap(
-            None,
+        ui.layout_columns(
             ui.div(ingredients),
             ui.div(directions),
-            fill=False,
-            style=css(grid_template_columns="5fr 7fr"),
+            col_widths=[5, 7],
+            fill=False
         ),
         source,
     )
