@@ -37,9 +37,12 @@ class Usage:
     total_tokens: int
 
 
+Roles = Literal["system", "user", "assistant"]
+
+
 class ChatMessage(TypedDict):
     content: str
-    role: Literal["system", "user", "assistant"]
+    role: Roles
 
 
 class ChoiceDelta:

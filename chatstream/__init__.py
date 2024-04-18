@@ -40,6 +40,7 @@ from .openai_types import (
     ChatMessage,
     OpenAiModel,
     openai_model_context_limits,
+    Roles
 )
 
 if sys.version_info < (3, 10):
@@ -56,6 +57,24 @@ DEFAULT_MODEL: OpenAiModel = "gpt-3.5-turbo"
 DEFAULT_SYSTEM_PROMPT = "You are a helpful assistant."
 DEFAULT_TEMPERATURE = 0.7
 DEFAULT_THROTTLE = 0.1
+
+# From https://icons.getbootstrap.com/icons/send/
+DEFAULT_BTN_ICON = ui.HTML('<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16"><path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/></svg>')
+
+
+# Same as Roles
+class RoleIconsType(TypedDict):
+    user: ui.HTML
+    assistant: ui.HTML
+    system: ui.HTML
+
+
+# From https://icons.getbootstrap.com/icons/
+ROLE_ICONS: RoleIconsType = {
+    "user": ui.HTML('<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/></svg>'),
+    "assistant": ui.HTML('<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-robot" viewBox="0 0 16 16"><path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5M3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.6 26.6 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.93.93 0 0 1-.765.935c-.845.147-2.34.346-4.235.346s-3.39-.2-4.235-.346A.93.93 0 0 1 3 9.219zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a25 25 0 0 1-1.871-.183.25.25 0 0 0-.068.495c.55.076 1.232.149 2.02.193a.25.25 0 0 0 .189-.071l.754-.736.847 1.71a.25.25 0 0 0 .404.062l.932-.97a25 25 0 0 0 1.922-.188.25.25 0 0 0-.068-.495c-.538.074-1.207.145-1.98.189a.25.25 0 0 0-.166.076l-.754.785-.842-1.7a.25.25 0 0 0-.182-.135"/><path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2zM14 7.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7.5A3.5 3.5 0 0 1 5.5 4h5A3.5 3.5 0 0 1 14 7.5"/></svg>'),
+    "system": ui.HTML('<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16"><path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"/><path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"/></svg>'),
+}
 
 # Make sure that the query text leaves at least this many tokens for the response. For
 # example, if the model has a 4096 token limit, then the longest query will be 4096
@@ -92,14 +111,15 @@ def chat_ui() -> ui.Tag:
     UI portion of chatstream Shiny module.
     """
 
-    return ui.div(
-        {"class": "shiny-gpt-chat", "style": "margin-top: 10px;"},
+    res = ui.div(
+        {"class": "shiny-gpt-chat"},
         _chat_dependency(),
         ui.output_ui("session_messages_ui"),
         ui.output_ui("current_streaming_message_ui"),
         ui.output_ui("query_ui"),
     )
 
+    return ui.fill.as_fill_item(res)
 
 # ================================================================================
 # Chat module server
@@ -133,6 +153,9 @@ class chat_server:
     throttle
         Throttle interval to use for incoming streaming messages. Can be a float or a
         function that returns a float.
+    button_icon
+        Icon to use for the button. Can be a string or a function that returns a
+        string.
     button_label
         Label to use for the button. Can be a string or a function that returns a
         string.
@@ -172,8 +195,9 @@ class chat_server:
         url: str | Callable[[], str] | None = None,
         system_prompt: str | Callable[[], str] = DEFAULT_SYSTEM_PROMPT,
         temperature: float | Callable[[], float] = DEFAULT_TEMPERATURE,
-        text_input_placeholder: str | Callable[[], str] | None = None,
-        button_label: str | Callable[[], str] = "Ask",
+        text_input_placeholder: str | Callable[[], str] | None = "Your message",
+        button_label: str | Callable[[], str] | None = None,
+        button_icon: str | Callable[[], str] = DEFAULT_BTN_ICON,
         throttle: float | Callable[[], float] = DEFAULT_THROTTLE,
         query_preprocessor: (
             Callable[[str], str] | Callable[[str], Awaitable[str]] | None
@@ -204,6 +228,7 @@ class chat_server:
         self.system_prompt = wrap_function_nonreactive(system_prompt)
         self.temperature = wrap_function_nonreactive(temperature)
         self.button_label = wrap_function_nonreactive(button_label)
+        self.button_icon = wrap_function_nonreactive(button_icon)
         self.throttle = wrap_function_nonreactive(throttle)
         self.text_input_placeholder = wrap_function_nonreactive(text_input_placeholder)
 
@@ -251,7 +276,7 @@ class chat_server:
         This method initializes the reactive components of this class.
         """
 
-        @reactive.Effect
+        @reactive.effect
         @reactive.event(self.streaming_chat_messages_batch)
         async def finalize_streaming_result():
             current_batch = self.streaming_chat_messages_batch()
@@ -289,7 +314,7 @@ class chat_server:
                     self.streaming_chat_string_pieces.set(tuple())
                     return
 
-        @reactive.Effect
+        @reactive.effect
         @reactive.event(self.input.ask, self._ask_trigger)
         async def perform_query():
             if self.input.query() == "":
@@ -369,11 +394,10 @@ class chat_server:
             # streaming is happening.
             self.streaming_chat_string_pieces.set(("",))
 
-            @reactive.Effect
+            @reactive.effect
             def copy_messages_to_batch():
                 self.streaming_chat_messages_batch.set(messages())
 
-        @self.output
         @render.ui
         def session_messages_ui():
             messages_html: list[ui.Tag] = []
@@ -383,15 +407,11 @@ class chat_server:
                     continue
 
                 messages_html.append(
-                    ui.div(
-                        {"class": message["role"] + "-message"},
-                        message["content_html"],
-                    )
+                    message_html(message["content_html"], message["role"])
                 )
 
-            return ui.div(*messages_html)
+            return messages_html
 
-        @self.output
         @render.ui
         async def current_streaming_message_ui():
             pieces = self.streaming_chat_string_pieces()
@@ -400,7 +420,7 @@ class chat_server:
             # this content will disappear and an identical-looking one will be added to
             # the `session_messages_ui` output.
             if len(pieces) == 0:
-                return ui.div()
+                return None
 
             content = "".join(pieces)
             if content == "":
@@ -408,41 +428,39 @@ class chat_server:
             else:
                 content = await self.answer_preprocessor(content)
 
-            return ui.div({"class": "assistant-message"}, content)
+            return message_html(content, "assistant")
 
-        @self.output
+        # Note: assets/chat.js makes an assumption that we invalidate the query UI when
+        # the chat starts streaming.
         @render.ui
         @reactive.event(self.hide_query_ui, self.streaming_chat_string_pieces)
         def query_ui():
-            # While streaming an answer, don't show the query input.
-            if self.hide_query_ui() or len(self.streaming_chat_string_pieces()) > 0:
-                return ui.div()
+            if self.hide_query_ui():
+                return None
+
+            disabled = len(self.streaming_chat_string_pieces()) > 0
 
             return ui.div(
-                ui.input_text_area(
-                    "query",
-                    None,
-                    # value="2+2",
-                    placeholder=self.text_input_placeholder(),
-                    autoresize=True,
-                    rows=1,
-                    width="100%",
-                ),
+                {"class": "query-container"},
                 ui.div(
-                    {"style": "width: 100%; text-align: right;"},
-                    ui.input_action_button("ask", self.button_label()),
-                ),
-                ui.tags.script(
-                    # The explicit focus() call is needed so that the user can type the
-                    # next question without clicking on the query box again. However,
-                    # it's a bit too aggressive, because it will steal focus if, while
-                    # the answer is streaming, the user clicks somewhere else. It would
-                    # be better to have the query box set to `display: none` while the
-                    # answer streams and then unset afterward, so that it can keep
-                    # focus, but won't steal focus.
-                    "document.getElementById('%s').focus();"
-                    % module.resolve_id("query")
-                ),
+                    {"class": "input-group"},
+                    # input_text_area() adds an additional container that makes it harder to style.
+                    # but shiny.js will bind to any <textarea>, so just use a plain textarea.
+                    ui.tags.textarea(
+                        id=module.resolve_id("query"),
+                        class_="form-control",
+                        style="resize:none;",
+                        placeholder="Responding..." if disabled else self.text_input_placeholder(),
+                        disabled=disabled,
+                    ),
+                    ui.input_action_button(
+                        "ask",
+                        label=self.button_label(),
+                        icon=self.button_icon(),
+                        disabled=disabled,
+                        class_="btn-primary",
+                    ),
+                )
             )
 
     def _system_prompt_message(self) -> ChatMessageEnriched:
@@ -493,6 +511,22 @@ def get_env_var_api_key() -> str:
 def get_token_count(s: str, model: OpenAiModel) -> int:
     encoding = tiktoken.encoding_for_model(model)
     return len(encoding.encode(s))
+
+
+def message_html(content: ui.TagChild, role: Roles) -> ui.Tag:
+    icon = ROLE_ICONS[role]
+    return ui.div(
+        {"class": role + "-message message-container"},
+        ui.span(
+            {"class": "badge rounded-pill text-bg-secondary"},
+            {"style": "height: fit-content;"},
+            icon
+        ),
+        ui.div(
+            {"class": "message-content"},
+            content,
+        ),
+    )
 
 
 # A place to keep references to Tasks so they don't get GC'd prematurely, as directed in

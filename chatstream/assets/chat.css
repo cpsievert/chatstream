@@ -1,33 +1,48 @@
-.shiny-gpt-chat textarea.form-control {
-  margin-top: 5px;
-  margin-bottom: 10px;
+/* Prevent the prompt from going too wide */
+.shiny-gpt-chat {
+  display: flex;
+  flex-direction: column;
+  width: min(680px, 100%); /* TODO: make this configurable */
+  margin: 0 auto;
+  overflow: auto;
 }
-.shiny-gpt-chat textarea.form-control:disabled {
-  /* Don't gray-out textarea when disabled. */
-  background-color: inherit;
+
+/* Prevent the assistant responses from "flickering" when recalculating */
+/* TODO: shiny should probably have a CSS variable for this */
+.shiny-gpt-chat .recalculating > * {
+  opacity: 1 !important;
 }
-.shiny-gpt-chat pre, code {
-  background-color: #eeeeee;
+
+.shiny-gpt-chat .message-container {
+  display: flex;
+  margin-bottom: 1rem;
+  gap: 1rem;
 }
-.shiny-gpt-chat .shiny-html-output p:last-child {
-  /* No space after last paragraph in a message */
+
+.shiny-gpt-chat .message-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.shiny-gpt-chat .message-content p:last-child {
   margin-bottom: 0;
 }
-.shiny-gpt-chat .shiny-html-output pre code {
+
+.shiny-gpt-chat .message-content pre code {
   /* Fix alignment of first line in a code block */
   padding: 0;
 }
-.shiny-gpt-chat .user-message {
-  border-radius: 4px;
-  padding: 5px 8px;
-  margin-bottom: 10px;
-  border: 1px solid #dddddd;
-  background-color: #ffffff;
+
+/* Make badges more circular */
+.shiny-gpt-chat .badge {
+  --bs-badge-padding-y: 0.65em;
 }
-.shiny-gpt-chat .assistant-message {
-  border-radius: 4px;
-  padding: 5px 8px;
-  margin-bottom: 10px;
-  border: 1px solid #dddddd;
-  background-color: #f0f0f0;
+
+.shiny-gpt-chat .query-container {
+  position: sticky;
+  bottom: 0;
+  margin-top: auto;
+  padding: 0.25rem;
+  background-color: var(--bs-body-bg, white);
 }
